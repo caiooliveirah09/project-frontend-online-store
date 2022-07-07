@@ -8,7 +8,7 @@ export async function getCategories() {
 }
 
 export async function getProductsFromCategoryAndQuery(categoryId, query) {
-  const url = ': https://api.mercadolibre.com/sites/MLB/search?q=';
+  const url = 'https://api.mercadolibre.com/sites/MLB/search?q=';
   const fullUrl = url.concat(categoryId, query);
 
   return fetch(fullUrl)
