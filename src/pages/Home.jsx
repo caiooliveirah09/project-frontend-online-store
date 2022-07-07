@@ -1,7 +1,8 @@
+import { shape } from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
-import Card from '../components/Card';
+import { getCategories, getProductsFromQuery } from '../services/api';
+import Product from '../components/Product';
 
 class Home extends React.Component {
   constructor() {
@@ -32,12 +33,18 @@ class Home extends React.Component {
 
   searchProducts = async () => {
     const { searchInput } = this.state;
-    const response = await getProductsFromCategoryAndQuery(searchInput);
+    const response = await getProductsFromQuery(searchInput);
     if (response.results.length !== 0) {
       this.setState({ productsInfo: response.results, haveInfo: true });
     } else {
       this.setState({ haveInfo: false });
     }
+  }
+
+  redirectToCategory = async ({ target }) => {
+    const { history: { push } } = this.props;
+    const { id } = target;
+    push(`/category/${id}`);
   }
 
   render() {
@@ -65,22 +72,30 @@ class Home extends React.Component {
         </Link>
         <aside>
           {categorias.map((categoria) => (
-            <button data-testid="category" type="button" key={ categoria.id }>
+            <button
+              data-testid="category"
+              type="button"
+              id={ categoria.id }
+              key={ categoria.id }
+              onClick={ this.redirectToCategory }
+            >
               {categoria.name}
             </button>
           ))}
         </aside>
         { haveInfo ? productsInfo.map((product) => (
-          <Card
+          <Product
             key={ product.id }
-            id={ product.id }
-            title={ product.title }
-            thumbnail={ product.thumbnail }
+            product={ product }
           />
         )) : <span>Nenhum produto foi encontrado</span>}
       </div>
     );
   }
 }
+
+Home.propTypes = {
+  history: shape({}).isRequired,
+};
 
 export default Home;
