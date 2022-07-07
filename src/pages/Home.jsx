@@ -14,7 +14,6 @@ class Home extends React.Component {
   }
 
   handleCategories = async () => {
-    // const { categorias } = this.state;
     const response = await getCategories();
     this.setState({
       categorias: response,
