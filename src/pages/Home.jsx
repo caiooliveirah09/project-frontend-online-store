@@ -1,3 +1,4 @@
+import { shape } from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { getCategories } from '../services/api';
@@ -21,6 +22,12 @@ class Home extends React.Component {
     });
   };
 
+  redirectToCategory = async ({ target }) => {
+    const { history: { push } } = this.props;
+    const { id } = target;
+    push(`/category/${id}`);
+  }
+
   render() {
     const { categorias } = this.state;
 
@@ -32,7 +39,13 @@ class Home extends React.Component {
         </Link>
         <aside>
           {categorias.map((categoria) => (
-            <button data-testid="category" type="button" key={ categoria.id }>
+            <button
+              data-testid="category"
+              type="button"
+              id={ categoria.id }
+              key={ categoria.id }
+              onClick={ this.redirectToCategory }
+            >
               {categoria.name}
             </button>
           ))}
@@ -41,5 +54,9 @@ class Home extends React.Component {
     );
   }
 }
+
+Home.propTypes = {
+  history: shape({}).isRequired,
+};
 
 export default Home;
