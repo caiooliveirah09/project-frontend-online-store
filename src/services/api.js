@@ -3,7 +3,7 @@ export async function getCategories() {
 
   return fetch(url)
     .then((response) => response.json())
-    .then(({ id }) => id)
+    .then((data) => data)
     .catch((error) => console.log(error));
 }
 
@@ -13,6 +13,6 @@ export async function getProductsFromCategoryAndQuery(categoryId, query) {
 
   return fetch(fullUrl)
     .then((response) => response.json())
-    .then((data) => console.log(data))
+    .then((data) => data)
     .catch((error) => console.log(error));
 }
