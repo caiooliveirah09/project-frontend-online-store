@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
+import Card from '../components/Card';
 
 class Home extends React.Component {
   constructor() {
@@ -70,10 +71,12 @@ class Home extends React.Component {
           ))}
         </aside>
         { haveInfo ? productsInfo.map((product) => (
-          <div data-testid="product" key={ product.id }>
-            <span>{product.title}</span>
-            <img alt={ product.title } src={ product.thumbnail } />
-          </div>
+          <Card
+            key={ product.id }
+            id={ product.id }
+            title={ product.title }
+            thumbnail={ product.thumbnail }
+          />
         )) : <span>Nenhum produto foi encontrado</span>}
       </div>
     );
