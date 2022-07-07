@@ -11,7 +11,12 @@ class Product extends Component {
         <img src={ thumbnail } alt={ title } />
         <h2>{ title }</h2>
         <span>{ price }</span>
-        <Link to={ `/product/${id}` }>Ver informações</Link>
+        <Link
+          data-testid="product-detail-link"
+          to={ `/product/${id}` }
+        >
+          Ver informações
+        </Link>
       </div>
     );
   }
