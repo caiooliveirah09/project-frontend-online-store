@@ -4,6 +4,8 @@ import Home from './pages/Home';
 import Cart from './pages/Cart';
 import ProductPage from './pages/ProductPage';
 import Categories from './pages/Categories';
+import FinishOrder from './pages/FinishOrder';
+
 import './App.css';
 
 function App() {

@@ -42,7 +42,6 @@ class Cart extends Component {
           </span>
         ) : (
           <>
-            <Link to="/finish">Finalizar Compra</Link>
             {cart.map((product) => (
               <section key={ product.id }>
                 <Product product={ product } />
@@ -51,6 +50,7 @@ class Cart extends Component {
                 </span>
               </section>
             ))}
+            <Link data-testid="checkout-products" to="/finish">Finalizar Compra</Link>
           </>
         )}
       </section>
