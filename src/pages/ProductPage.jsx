@@ -21,7 +21,7 @@ class ProductPage extends React.Component {
     this.setState({ productInfo: response });
   }
 
-  addToCart = async () => {
+  addToCart = () => {
     const { productInfo: { id } } = this.state;
     addProductsToCart(id);
   }

@@ -49,6 +49,11 @@ class Cart extends Component {
     this.setState({});
   };
 
+  clearCart = () => {
+    saveProductsToCart([]);
+    this.setState({ cart: [] });
+  }
+
   render() {
     const { cart } = this.state;
     return (
@@ -85,6 +90,15 @@ class Cart extends Component {
                 </div>
               </section>
             ))}
+            <div>
+              <button
+                type="button"
+                onClick={ this.clearCart }
+              >
+                Esvaziar Carrinho
+
+              </button>
+            </div>
           </>
         )}
       </section>
