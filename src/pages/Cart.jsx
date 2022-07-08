@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import Product from '../components/Product';
-import { getProductsFromCart } from '../services/api';
+import getProductsFromId, {
+  addProductsToCart,
+  getProductsFromCart,
+} from '../services/api';
 
 class Cart extends Component {
   constructor() {
@@ -14,9 +17,16 @@ class Cart extends Component {
     this.loadCartProducts();
   }
 
-  loadCartProducts = () => {
-    const productsList = getProductsFromCart();
-    this.setState({ cart: productsList });
+  loadCartProducts = async () => {
+    const productsId = getProductsFromCart();
+    productsId.map(async (id) => {
+      const product = await getProductsFromId(id);
+      this.setState((pastState) => ({
+        cart: [...pastState.cart, product],
+      }));
+    });
+    // console.log(await getProductsFromId(productsId[0]));
+    // this.setState({ cart: productsList });
   };
 
   getProductQuantity = (productId) => {
@@ -26,6 +36,7 @@ class Cart extends Component {
 
   render() {
     const { cart } = this.state;
+    console.log(cart);
     return (
       <section>
         {cart.length === 0 ? (
@@ -36,7 +47,10 @@ class Cart extends Component {
           <>
             {cart.map((product) => (
               <section key={ product.id }>
-                <Product product={ product } />
+                <Product
+                  product={ product }
+                  quantity={ this.getProductQuantity(product.id) }
+                />
                 <span data-testid="shopping-cart-product-quantity">
                   {this.getProductQuantity(product.id)}
                 </span>

@@ -45,7 +45,7 @@ export async function getProductsFromQuery(query) {
     .catch((error) => console.log(error));
 }
 
-export default async function getProductFromId(id) {
+export default async function getProductsFromId(id) {
   const url = `https://api.mercadolibre.com/items/${id}`;
 
   return fetch(url)

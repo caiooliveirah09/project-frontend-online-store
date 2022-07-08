@@ -1,7 +1,8 @@
 import { shape } from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
+import { getCategories, getProductsFromQuery } from '../services/api';
+import Product from '../components/Product';
 
 class Home extends React.Component {
   constructor() {
@@ -32,7 +33,7 @@ class Home extends React.Component {
 
   searchProducts = async () => {
     const { searchInput } = this.state;
-    const response = await getProductsFromCategoryAndQuery(searchInput);
+    const response = await getProductsFromQuery(searchInput);
     if (response.results.length !== 0) {
       this.setState({ productsInfo: response.results, haveInfo: true });
     } else {
@@ -83,10 +84,10 @@ class Home extends React.Component {
           ))}
         </aside>
         { haveInfo ? productsInfo.map((product) => (
-          <div data-testid="product" key={ product.id }>
-            <span>{product.title}</span>
-            <img alt={ product.title } src={ product.thumbnail } />
-          </div>
+          <Product
+            key={ product.id }
+            product={ product }
+          />
         )) : <span>Nenhum produto foi encontrado</span>}
       </div>
     );
