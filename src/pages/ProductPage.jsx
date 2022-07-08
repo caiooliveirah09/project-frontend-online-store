@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import getProductsFromId, { addProductsToCart } from '../services/api';
-import Product from '../components/Product';
 
 class ProductPage extends React.Component {
   constructor() {
@@ -28,11 +28,12 @@ class ProductPage extends React.Component {
 
   render() {
     const { productInfo } = this.state;
-    console.log(productInfo);
     return (
       <div>
-        {/* <h2 data-testid="product-detail-name">{ productInfo.title }</h2> */}
-        <Product product={ productInfo } />
+        <Link to="/cart" data-testid="shopping-cart-button">
+          Carrinho
+        </Link>
+        <h2 data-testid="product-detail-name">{ productInfo.title }</h2>
         <button
           type="button"
           data-testid="product-detail-add-to-cart"

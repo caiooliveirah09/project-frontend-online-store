@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import Product from '../components/Product';
-import getProductsFromId, {
-  addProductsToCart,
-  getProductsFromCart,
-} from '../services/api';
+import getProductsFromId, { getProductsFromCart } from '../services/api';
 
 class Cart extends Component {
   constructor() {
@@ -17,26 +14,25 @@ class Cart extends Component {
     this.loadCartProducts();
   }
 
-  loadCartProducts = async () => {
-    const productsId = getProductsFromCart();
-    productsId.map(async (id) => {
-      const product = await getProductsFromId(id);
+  loadCartProducts = () => {
+    // Linha 20 tá criando um novo array sem itens(IDs) repetidos!!
+    const allProductsId = getProductsFromCart();
+    const singleProductsId = [...new Set(allProductsId)];
+    singleProductsId.map(async (productId) => {
+      const product = await getProductsFromId(productId);
       this.setState((pastState) => ({
         cart: [...pastState.cart, product],
       }));
     });
-    // console.log(await getProductsFromId(productsId[0]));
-    // this.setState({ cart: productsList });
   };
 
   getProductQuantity = (productId) => {
-    const { cart } = this.state;
-    return cart.filter(({ id }) => id === productId).length;
+    const cart = getProductsFromCart();
+    return cart.filter((id) => id === productId).length;
   };
 
   render() {
     const { cart } = this.state;
-    console.log(cart);
     return (
       <section>
         {cart.length === 0 ? (
@@ -47,10 +43,7 @@ class Cart extends Component {
           <>
             {cart.map((product) => (
               <section key={ product.id }>
-                <Product
-                  product={ product }
-                  quantity={ this.getProductQuantity(product.id) }
-                />
+                <Product product={ product } />
                 <span data-testid="shopping-cart-product-quantity">
                   {this.getProductQuantity(product.id)}
                 </span>
