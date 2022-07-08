@@ -4,7 +4,9 @@ if (!JSON.parse(localStorage.getItem(CART_PRODUCTS_KEY))) {
   localStorage.setItem(CART_PRODUCTS_KEY, JSON.stringify([]));
 }
 
-const readProductsFromCart = () => JSON.parse(localStorage.getItem(CART_PRODUCTS_KEY));
+export function getProductsFromCart() {
+  return JSON.parse(localStorage.getItem(CART_PRODUCTS_KEY));
+}
 
 export function saveProductsToCart(cart) {
   localStorage.setItem(CART_PRODUCTS_KEY, JSON.stringify(cart));
@@ -57,11 +59,7 @@ export default async function getProductsFromId(id) {
 
 export function addProductsToCart(productId) {
   if (productId) {
-    const cartProducts = readProductsFromCart();
+    const cartProducts = getProductsFromCart();
     saveProductsToCart([...cartProducts, productId]);
   }
-}
-
-export function getProductsFromCart() {
-  return readProductsFromCart();
 }
