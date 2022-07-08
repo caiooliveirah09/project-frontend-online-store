@@ -33,3 +33,12 @@ export async function getProductsFromQuery(query) {
     .then((data) => data)
     .catch((error) => console.log(error));
 }
+
+export default async function getProductFromId(id) {
+  const url = `https://api.mercadolibre.com/items/${id}`;
+
+  return fetch(url)
+    .then((response) => response.json())
+    .then((data) => data)
+    .catch((error) => console.log(error));
+}
