@@ -1,7 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { getCategories, getProductsFromQuery } from '../services/api';
+import {
+  getCategories,
+  getProductsFromQuery,
+  getProductsFromCart,
+} from '../services/api';
 import Product from '../components/Product';
 
 class Home extends React.Component {
@@ -12,11 +16,13 @@ class Home extends React.Component {
       searchInput: '',
       productsInfo: [],
       haveInfo: true,
+      cartAmount: 0,
     };
   }
 
   componentDidMount() {
     this.handleCategories();
+    this.getAmountOfItemsInCart();
   }
 
   handleCategories = async () => {
@@ -29,7 +35,7 @@ class Home extends React.Component {
   handleChange = (event) => {
     const { value } = event.target;
     this.setState({ searchInput: value });
-  }
+  };
 
   searchProducts = async () => {
     const { searchInput } = this.state;
@@ -39,16 +45,26 @@ class Home extends React.Component {
     } else {
       this.setState({ haveInfo: false });
     }
-  }
+  };
 
   redirectToCategory = ({ target }) => {
-    const { history: { push } } = this.props;
+    const {
+      history: { push },
+    } = this.props;
     const { id } = target;
     push(`/category/${id}`);
-  }
+  };
+
+  getAmountOfItemsInCart = () => {
+    const localStorageNow = getProductsFromCart();
+    if (localStorageNow) {
+      console.log(localStorageNow.length);
+      this.setState({ cartAmount: localStorageNow.length });
+    }
+  };
 
   render() {
-    const { categorias, productsInfo, haveInfo } = this.state;
+    const { categorias, productsInfo, haveInfo, cartAmount } = this.state;
     return (
       <div data-testid="home-initial-message">
         <span>Digite algum termo de pesquisa ou escolha uma categoria.</span>
@@ -68,6 +84,8 @@ class Home extends React.Component {
         </label>
         <Link to="/cart" data-testid="shopping-cart-button">
           Carrinho
+          {' '}
+          <span>{cartAmount}</span>
         </Link>
         <aside>
           {categorias.map((categoria) => (
@@ -82,12 +100,13 @@ class Home extends React.Component {
             </button>
           ))}
         </aside>
-        { haveInfo ? productsInfo.map((product) => (
-          <Product
-            key={ product.id }
-            product={ product }
-          />
-        )) : <span>Nenhum produto foi encontrado</span>}
+        {haveInfo ? (
+          productsInfo.map((product) => (
+            <Product key={ product.id } product={ product } />
+          ))
+        ) : (
+          <span>Nenhum produto foi encontrado</span>
+        )}
       </div>
     );
   }
