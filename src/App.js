@@ -14,6 +14,7 @@ function App() {
         <Route path="/cart" component={ Cart } />
         <Route path="/product/:id" component={ ProductPage } />
         <Route path="/category/:id" component={ Categories } />
+        <Route path="/finish" component={ FinishOrder } />
       </Switch>
     </BrowserRouter>
   );

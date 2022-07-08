@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Product from '../components/Product';
 import getProductsFromId, { getProductsFromCart } from '../services/api';
 
@@ -41,6 +42,7 @@ class Cart extends Component {
           </span>
         ) : (
           <>
+            <Link to="/finish">Finalizar Compra</Link>
             {cart.map((product) => (
               <section key={ product.id }>
                 <Product product={ product } />
