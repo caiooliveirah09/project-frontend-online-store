@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import getProductFromId from '../services/api';
+import Assessments from '../components/Assessments';
 
 class productPage extends React.Component {
   constructor() {
@@ -22,9 +23,13 @@ class productPage extends React.Component {
 
   render() {
     const { productInfo } = this.state;
+    const { match } = this.props;
+    const { params } = match;
+    const { id } = params;
     return (
       <div>
         <span data-testid="product-detail-name">{ productInfo.title }</span>
+        <Assessments id={ id } />
       </div>
     );
   }
