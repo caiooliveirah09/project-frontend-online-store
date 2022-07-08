@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import Product from '../components/Product';
-import getProductsFromId, { getProductsFromCart } from '../services/api';
+import getProductsFromId, {
+  addProductsToCart,
+  getProductsFromCart,
+  saveProductsToCart,
+} from '../services/api';
 
 class Cart extends Component {
   constructor() {
@@ -31,6 +35,20 @@ class Cart extends Component {
     return cart.filter((id) => id === productId).length;
   };
 
+  decreaseAmountInCart = (productId) => {
+    const localStorageNow = getProductsFromCart();
+    const firstProduct = localStorageNow.find((id) => id === productId);
+    const index = localStorageNow.indexOf(firstProduct);
+    localStorageNow.splice(index, 1);
+    saveProductsToCart(localStorageNow);
+    this.setState({});
+  };
+
+  increaseAmountInCart = (productId) => {
+    addProductsToCart(productId);
+    this.setState({});
+  };
+
   render() {
     const { cart } = this.state;
     return (
@@ -44,9 +62,27 @@ class Cart extends Component {
             {cart.map((product) => (
               <section key={ product.id }>
                 <Product product={ product } />
-                <span data-testid="shopping-cart-product-quantity">
-                  {this.getProductQuantity(product.id)}
-                </span>
+                <div>
+                  <button
+                    type="button"
+                    data-testid="product-decrease-quantity"
+                    onClick={ () => this.decreaseAmountInCart(product.id) }
+                  >
+                    -
+                  </button>
+
+                  <span data-testid="shopping-cart-product-quantity">
+                    {this.getProductQuantity(product.id)}
+                  </span>
+
+                  <button
+                    type="button"
+                    data-testid="product-decrease-quantity"
+                    onClick={ () => this.increaseAmountInCart(product.id) }
+                  >
+                    +
+                  </button>
+                </div>
               </section>
             ))}
           </>

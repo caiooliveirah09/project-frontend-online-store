@@ -6,8 +6,9 @@ if (!JSON.parse(localStorage.getItem(CART_PRODUCTS_KEY))) {
 
 const readProductsFromCart = () => JSON.parse(localStorage.getItem(CART_PRODUCTS_KEY));
 
-const saveProductsToCart = (cart) => localStorage
-  .setItem(CART_PRODUCTS_KEY, JSON.stringify(cart));
+export function saveProductsToCart(cart) {
+  localStorage.setItem(CART_PRODUCTS_KEY, JSON.stringify(cart));
+}
 
 export async function getCategories() {
   const url = 'https://api.mercadolibre.com/sites/MLB/categories';
