@@ -1,6 +1,10 @@
 const CART_PRODUCTS_KEY = 'cart_products';
 
-const getProductsFromCart = () => JSON.parse(localStorage.getItem(CART_PRODUCTS_KEY));
+if (!JSON.parse(localStorage.getItem(CART_PRODUCTS_KEY))) {
+  localStorage.setItem(CART_PRODUCTS_KEY, JSON.stringify([]));
+}
+
+const readProductsFromCart = () => JSON.parse(localStorage.getItem(CART_PRODUCTS_KEY));
 
 const saveProductsToCart = (cart) => localStorage
   .setItem(CART_PRODUCTS_KEY, JSON.stringify(cart));
@@ -50,9 +54,13 @@ export default async function getProductFromId(id) {
     .catch((error) => console.log(error));
 }
 
-export async function addProductsToCart(productId) {
+export function addProductsToCart(productId) {
   if (productId) {
-    const cartProducts = getProductsFromCart();
+    const cartProducts = readProductsFromCart();
     saveProductsToCart([...cartProducts, productId]);
   }
+}
+
+export function getProductsFromCart() {
+  return readProductsFromCart();
 }
