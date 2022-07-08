@@ -9,8 +9,8 @@ class Product extends Component {
     return (
       <div data-testid="product">
         <img src={ thumbnail } alt={ title } />
-        <h2>{ title }</h2>
-        <span>{ price }</span>
+        <h2 data-testid="shopping-cart-product-name">{title}</h2>
+        <span>{price}</span>
         <Link
           data-testid="product-detail-link"
           to={ `/product/${id}` }
