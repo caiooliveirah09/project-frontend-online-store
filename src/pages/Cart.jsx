@@ -15,11 +15,11 @@ class Cart extends Component {
   }
 
   loadCartProducts = () => {
-    // Linha 20 tá criando um novo array sem itens(IDs) repetidos!!
+    // Linha 20 tá criando um novo array sem IDs repetidos!!
     const allProductsId = getProductsFromCart();
-    const singleProductsId = [...new Set(allProductsId)];
-    singleProductsId.map(async (productId) => {
-      const product = await getProductsFromId(productId);
+    const eachProductId = [...new Set(allProductsId)];
+    eachProductId.map(async (id) => {
+      const product = await getProductsFromId(id);
       this.setState((pastState) => ({
         cart: [...pastState.cart, product],
       }));
