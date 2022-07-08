@@ -1,4 +1,4 @@
-import { shape } from 'prop-types';
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { getCategories, getProductsFromQuery } from '../services/api';
@@ -41,7 +41,7 @@ class Home extends React.Component {
     }
   }
 
-  redirectToCategory = async ({ target }) => {
+  redirectToCategory = ({ target }) => {
     const { history: { push } } = this.props;
     const { id } = target;
     push(`/category/${id}`);
@@ -49,7 +49,6 @@ class Home extends React.Component {
 
   render() {
     const { categorias, productsInfo, haveInfo } = this.state;
-
     return (
       <div data-testid="home-initial-message">
         <span>Digite algum termo de pesquisa ou escolha uma categoria.</span>
@@ -95,7 +94,9 @@ class Home extends React.Component {
 }
 
 Home.propTypes = {
-  history: shape({}).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
 };
 
 export default Home;
