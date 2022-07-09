@@ -2,7 +2,8 @@ import { shape } from 'prop-types';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Product from '../components/Product';
-import { addProductsToCart, getProductsFromCategory } from '../services/api';
+import { getProductsFromCategory, getProductsFromId } from '../services/api';
+import { addProductsToCart } from '../services/storage';
 
 class Categories extends Component {
   constructor() {
@@ -19,14 +20,14 @@ class Categories extends Component {
   getProducts = async () => {
     const { match: { params: { id } } } = this.props;
     const { results } = await getProductsFromCategory(id);
-    this.setState({
-      productsList: results,
-    });
+    this.setState({ productsList: results });
   }
 
-  addToCart = async ({ target }) => {
+  addToCart = ({ target }) => {
+    const { productsList } = this.state;
     const { id } = target;
-    addProductsToCart(id);
+    const productInfo = productsList.find((item) => item.id === id);
+    addProductsToCart(productInfo);
   }
 
   render() {
@@ -41,9 +42,9 @@ class Categories extends Component {
             <Product product={ product } />
             <button
               type="button"
-              data-testid="product-add-to-cart"
-              onClick={ this.addToCart }
               id={ product.id }
+              onClick={ this.addToCart }
+              data-testid="product-add-to-cart"
             >
               Adicionar ao Carrinho
             </button>

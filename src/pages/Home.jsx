@@ -70,15 +70,15 @@ class Home extends React.Component {
           Carrinho
         </Link>
         <aside>
-          {categorias.map((categoria) => (
+          {categorias.map(({ name, id }) => (
             <button
               data-testid="category"
               type="button"
-              id={ categoria.id }
-              key={ categoria.id }
+              id={ id }
+              key={ id }
               onClick={ this.redirectToCategory }
             >
-              {categoria.name}
+              {name}
             </button>
           ))}
         </aside>

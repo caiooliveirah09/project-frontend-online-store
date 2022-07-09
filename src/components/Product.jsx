@@ -4,17 +4,15 @@ import { Link } from 'react-router-dom';
 
 class Product extends Component {
   render() {
-    const { product } = this.props;
-    const { price, title, thumbnail, id } = product;
+    const {
+      product: { id, price, thumbnail, title },
+    } = this.props;
     return (
       <div data-testid="product">
         <img src={ thumbnail } alt={ title } />
         <h2 data-testid="shopping-cart-product-name">{title}</h2>
         <span>{price}</span>
-        <Link
-          data-testid="product-detail-link"
-          to={ `/product/${id}` }
-        >
+        <Link data-testid="product-detail-link" to={ `/product/${id}` }>
           Ver informações
         </Link>
       </div>
@@ -24,9 +22,10 @@ class Product extends Component {
 
 Product.propTypes = {
   product: shape({
+    id: string,
     price: number,
-    title: string,
     thumbnail: string,
+    title: string,
   }).isRequired,
 };
 
