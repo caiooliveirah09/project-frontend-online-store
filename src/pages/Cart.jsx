@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Product from '../components/Product';
-import { getProductsFromCart } from '../services/storage';
+import { getProductsFromCart, saveProductsToCart } from '../services/storage';
 
 class Cart extends Component {
   constructor() {
@@ -25,6 +25,18 @@ class Cart extends Component {
     return quantity;
   };
 
+  stockControl = (productId) => {
+    const storage = getProductsFromCart();
+    const product = storage.find(({ id }) => id === productId);
+    const { inStock, quantity } = product;
+    return quantity < inStock;
+  };
+
+  clearCart = () => {
+    saveProductsToCart([]);
+    this.loadCartProducts();
+  };
+
   render() {
     const { cart } = this.state;
     return (
@@ -36,12 +48,14 @@ class Cart extends Component {
         ) : (
           <>
             {cart.map((product) => (
-              <div key={ product.id }>
+              <section key={ product.id }>
                 <Product product={ product } />
-                <span data-testid="shopping-cart-product-quantity">
-                  {this.getProductQuantity(product.id)}
-                </span>
-              </div>
+                <div>
+                  <span data-testid="shopping-cart-product-quantity">
+                    {this.getProductQuantity(product.id)}
+                  </span>
+                </div>
+              </section>
             ))}
           </>
         )}

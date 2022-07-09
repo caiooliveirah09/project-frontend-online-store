@@ -35,6 +35,7 @@ class ProductPage extends Component {
           Carrinho
         </Link>
         <h2 data-testid="product-detail-name">{ productInfo.title }</h2>
+        <p>{ productInfo.available_quantity }</p>
         <button
           type="button"
           data-testid="product-detail-add-to-cart"

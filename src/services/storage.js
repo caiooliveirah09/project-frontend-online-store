@@ -37,11 +37,18 @@ const updateProductQuantity = (productId, newQuantity) => {
   return storage;
 };
 
-export function addProductsToCart({ id, title, thumbnail, price }) {
+export function addProductsToCart({
+  id,
+  title,
+  thumbnail,
+  price,
+  available_quantity: inStock,
+}) {
   const cartProducts = getProductsFromCart();
   const productQuantity = checkProductQuantity(id);
   const newProduct = {
     id,
+    inStock,
     title,
     thumbnail,
     price,
