@@ -2,7 +2,7 @@ import { shape } from 'prop-types';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Product from '../components/Product';
-import { getProductsFromCategory, getProductsFromId } from '../services/api';
+import { getProductsFromCategory } from '../services/api';
 import { addProductsToCart } from '../services/storage';
 
 class Categories extends Component {
