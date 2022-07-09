@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class FinishOrder extends Component {
   render() {
     return (
-      <div>
+      <div className="form">
         <form action="">
           <div className="groupAbout">
 
