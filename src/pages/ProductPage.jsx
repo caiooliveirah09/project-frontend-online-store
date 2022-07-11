@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import getProductsFromId, { addProductsToCart } from '../services/api';
+import { getProductsFromId } from '../services/api';
+import { addProductsToCart } from '../services/storage';
 
-class ProductPage extends React.Component {
+class ProductPage extends Component {
   constructor() {
     super();
     this.state = {
@@ -21,19 +22,19 @@ class ProductPage extends React.Component {
     this.setState({ productInfo: response });
   }
 
-  addToCart = async () => {
-    const { productInfo: { id } } = this.state;
-    addProductsToCart(id);
+  addToCart = () => {
+    const { productInfo } = this.state;
+    addProductsToCart(productInfo);
   }
 
   render() {
-    const { productInfo } = this.state;
+    const { productInfo: { title } } = this.state;
     return (
       <div>
         <Link to="/cart" data-testid="shopping-cart-button">
           Carrinho
         </Link>
-        <h2 data-testid="product-detail-name">{ productInfo.title }</h2>
+        <h2 data-testid="product-detail-name">{ title }</h2>
         <button
           type="button"
           data-testid="product-detail-add-to-cart"

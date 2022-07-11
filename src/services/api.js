@@ -1,14 +1,3 @@
-const CART_PRODUCTS_KEY = 'cart_products';
-
-if (!JSON.parse(localStorage.getItem(CART_PRODUCTS_KEY))) {
-  localStorage.setItem(CART_PRODUCTS_KEY, JSON.stringify([]));
-}
-
-const readProductsFromCart = () => JSON.parse(localStorage.getItem(CART_PRODUCTS_KEY));
-
-const saveProductsToCart = (cart) => localStorage
-  .setItem(CART_PRODUCTS_KEY, JSON.stringify(cart));
-
 export async function getCategories() {
   const url = 'https://api.mercadolibre.com/sites/MLB/categories';
 
@@ -45,22 +34,11 @@ export async function getProductsFromQuery(query) {
     .catch((error) => console.log(error));
 }
 
-export default async function getProductsFromId(id) {
-  const url = `https://api.mercadolibre.com/items/${id}`;
+export async function getProductsFromId(itemId) {
+  const url = `https://api.mercadolibre.com/items/${itemId}`;
 
   return fetch(url)
     .then((response) => response.json())
     .then((data) => data)
     .catch((error) => console.log(error));
-}
-
-export function addProductsToCart(productId) {
-  if (productId) {
-    const cartProducts = readProductsFromCart();
-    saveProductsToCart([...cartProducts, productId]);
-  }
-}
-
-export function getProductsFromCart() {
-  return readProductsFromCart();
 }
