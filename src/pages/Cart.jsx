@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import Product from '../components/Product';
-import getProductsFromId, {
-  addProductsToCart,
+import {
   getProductsFromCart,
   saveProductsToCart,
-} from '../services/api';
+} from '../services/storage';
 
 class Cart extends Component {
   constructor() {
@@ -19,34 +18,38 @@ class Cart extends Component {
   }
 
   loadCartProducts = () => {
-    // Linha 20 tá criando um novo array sem IDs repetidos!!
-    const allProductsId = getProductsFromCart();
-    const eachProductId = [...new Set(allProductsId)];
-    eachProductId.map(async (id) => {
-      const product = await getProductsFromId(id);
-      this.setState((pastState) => ({
-        cart: [...pastState.cart, product],
-      }));
-    });
+    const cartProducts = getProductsFromCart();
+    this.setState({ cart: cartProducts });
   };
 
   getProductQuantity = (productId) => {
-    const cart = getProductsFromCart();
-    return cart.filter((id) => id === productId).length;
+    const cartProducts = getProductsFromCart();
+    const { quantity } = cartProducts.find(({ id }) => id === productId);
+    return quantity;
   };
+
+  findProductAtLocalStorage = (nowStorage, productId) => {
+    for (let index = 0; index < nowStorage.length; index += 1) {
+      if (nowStorage[index].id === productId) {
+        return index;
+      }
+    }
+  }
 
   decreaseAmountInCart = (productId) => {
     const localStorageNow = getProductsFromCart();
-    const firstProduct = localStorageNow.find((id) => id === productId);
-    const index = localStorageNow.indexOf(firstProduct);
-    localStorageNow.splice(index, 1);
+    const index = this.findProductAtLocalStorage(localStorageNow, productId);
+    if (localStorageNow[index].quantity > 1) localStorageNow[index].quantity -= 1;
     saveProductsToCart(localStorageNow);
-    this.setState({});
+    this.setState({ cart: localStorageNow });
   };
 
   increaseAmountInCart = (productId) => {
-    addProductsToCart(productId);
-    this.setState({});
+    const localStorageNow = getProductsFromCart();
+    const index = this.findProductAtLocalStorage(localStorageNow, productId);
+    localStorageNow[index].quantity += 1;
+    saveProductsToCart(localStorageNow);
+    this.setState({ cart: localStorageNow });
   };
 
   clearCart = () => {
@@ -65,7 +68,7 @@ class Cart extends Component {
         ) : (
           <>
             {cart.map((product) => (
-              <section key={ product.id }>
+              <div key={ product.id }>
                 <Product product={ product } />
                 <div>
                   <button
@@ -82,13 +85,13 @@ class Cart extends Component {
 
                   <button
                     type="button"
-                    data-testid="product-decrease-quantity"
+                    data-testid="product-increase-quantity"
                     onClick={ () => this.increaseAmountInCart(product.id) }
                   >
                     +
                   </button>
                 </div>
-              </section>
+              </div>
             ))}
             <div>
               <button type="button" onClick={ this.clearCart }>
