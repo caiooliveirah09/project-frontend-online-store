@@ -48,6 +48,7 @@ class Home extends React.Component {
   getProducts = async ({ target }) => {
     const { id } = target;
     const { results } = await getProductsFromCategory(id);
+    console.log(results);
     this.setState({
       productsInfo: [],
       productsList: results,
@@ -119,6 +120,8 @@ class Home extends React.Component {
           && productsList.map((product) => (
             <div key={ product.id }>
               <Product product={ product } />
+              { product.shipping.free_shipping
+              && <h3 data-testid="free-shipping">Frete Grátis</h3> }
               <button
                 type="button"
                 id={ product.id }
