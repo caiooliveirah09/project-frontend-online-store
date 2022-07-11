@@ -28,13 +28,13 @@ class ProductPage extends Component {
   }
 
   render() {
-    const { productInfo } = this.state;
+    const { productInfo: { title } } = this.state;
     return (
       <div>
         <Link to="/cart" data-testid="shopping-cart-button">
           Carrinho
         </Link>
-        <h2 data-testid="product-detail-name">{ productInfo.title }</h2>
+        <h2 data-testid="product-detail-name">{ title }</h2>
         <button
           type="button"
           data-testid="product-detail-add-to-cart"
