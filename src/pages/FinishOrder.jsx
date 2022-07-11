@@ -18,11 +18,10 @@ class FinishOrder extends Component {
 
   totalPrice = () => {
     const cartProducts = getProductsFromCart();
-    console.log(cartProducts);
     const soma = cartProducts
-      .map((x) => x.price);
-      // .reduce((a, b) => a + b);
-    console.log(soma);
+      .map((x) => x.price)
+      .reduce((a, b) => a + b, 0);
+    this.setState({ totalPrice: soma });
   }
 
   loadCartProducts = () => {
