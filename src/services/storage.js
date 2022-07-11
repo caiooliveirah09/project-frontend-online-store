@@ -8,9 +8,9 @@ export const getProductsFromCart = () => (
   JSON.parse(localStorage.getItem(CART_PRODUCTS_KEY)));
 
 export const saveProductsToCart = (cart) => {
-  for (let index = 0; index < cart.length; index += 1) {
-    if (cart[index].quantity === 0) cart.splice(index, 1);
-  }
+  cart.forEach(({ quantity }, index) => {
+    if (quantity === 0) cart.splice(index, 1);
+  });
   (localStorage.setItem(CART_PRODUCTS_KEY, JSON.stringify(cart)));
 };
 
