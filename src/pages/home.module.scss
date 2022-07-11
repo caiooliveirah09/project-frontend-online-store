@@ -53,30 +53,3 @@
 }
 
 
-.sidebarContainer{
-    display: flex;
-    aside{
-        width:20rem;
-        height:100%;    
-        display: flex;
-        flex-direction: column;
-        padding: 0.5rem 2rem;
-        background-color: rgb(27, 27, 28);
-        gap: 0.8rem;
-        button{
-            padding: 1rem 0.5rem;
-            background-color: #75339b;
-            color: rgb(242, 221, 245);
-            border: 0;
-            border-radius: 8px;
-            font-size: 17px;
-            font-weight: normal;
-            font-family: Roboto;
-            transition: background-color 0.3s;
-            &:hover{
-                background-color:#924eba;
-            }
-
-        }
-    }
-}

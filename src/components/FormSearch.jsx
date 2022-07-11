@@ -6,7 +6,7 @@ export default class FormSearch extends React.Component {
     const { handleChange, searchProducts } = this.props;
     return (
       <form action="">
-        <p>Digite algum termo de pesquisa ou escolha uma categoria.</p>  
+        <p>Digite algum termo de pesquisa ou escolha uma categoria.</p>
         <label htmlFor="search">
           <input
             id="search"

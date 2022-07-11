@@ -23,19 +23,9 @@ class ProductPage extends Component {
     this.setState({ productInfo: response });
   }
 
-  modal = () =>{
-    return (
-      <div>
-        <h1>Hello</h1>
-        <h2>Modal</h2>
-      </div>
-    );
-  }
-
   addToCart = () => {
     const { productInfo } = this.state;
     addProductsToCart(productInfo);
-    this.modal();
   }
 
   render() {
