@@ -56,7 +56,8 @@ class Home extends React.Component {
 
   getAmountOfItemsInCart = () => {
     const localStorageNow = getProductsFromCart();
-    const cartTotal = localStorageNow.reduce((acc, curr) => acc + curr.quantity, 0);
+    const cartTotal = localStorageNow
+      .reduce((acc, curr) => acc + curr.quantity, 0);
     if (localStorageNow) {
       this.setState({ cartAmount: cartTotal });
     }
