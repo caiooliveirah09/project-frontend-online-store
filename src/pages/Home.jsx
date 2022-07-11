@@ -6,7 +6,7 @@ import {
   getProductsFromQuery,
 } from '../services/api';
 import Product from '../components/Product';
-import { addProductsToCart } from '../services/storage';
+import { addProductsToCart, getProductsFromCart } from '../services/storage';
 
 class Home extends React.Component {
   constructor() {
@@ -17,11 +17,13 @@ class Home extends React.Component {
       categories: [],
       productsInfo: [],
       productsList: [],
+      cartAmount: 0,
     };
   }
 
   componentDidMount() {
     this.handleCategories();
+    this.getAmountOfItemsInCart();
   }
 
   handleCategories = async () => {
@@ -52,18 +54,29 @@ class Home extends React.Component {
     });
   };
 
+  getAmountOfItemsInCart = () => {
+    const localStorageNow = getProductsFromCart();
+    const cartTotal = localStorageNow.reduce((acc, curr) => acc + curr.quantity, 0);
+    if (localStorageNow) {
+      this.setState({ cartAmount: cartTotal });
+    }
+  };
+
   addToCart = ({ target }) => {
     const { productsList } = this.state;
     const product = productsList.find(({ id }) => id === target.id);
     addProductsToCart(product);
+    this.getAmountOfItemsInCart();
   };
 
   render() {
-    const { categories, productsInfo, productsList, haveInfo } = this.state;
+    const { categories, productsInfo, productsList, haveInfo, cartAmount } = this.state;
     return (
       <div data-testid="home-initial-message">
         <Link to="/cart" data-testid="shopping-cart-button">
           Carrinho
+          {' '}
+          <span data-testid="shopping-cart-size">{cartAmount}</span>
         </Link>
         <span>Digite algum termo de pesquisa ou escolha uma categoria.</span>
         <label htmlFor="input">
