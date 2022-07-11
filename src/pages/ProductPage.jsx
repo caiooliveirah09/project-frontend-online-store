@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import getProductsFromId, {
-  addProductsToCart,
-  getProductsFromCart,
-} from '../services/api';
+import { getProductsFromId } from '../services/api';
+import { addProductsToCart, getProductsFromCart } from '../services/storage';
+import Assessments from '../components/Assessments';
 
-class ProductPage extends React.Component {
+class ProductPage extends Component {
   constructor() {
     super();
     this.state = {
@@ -17,6 +16,7 @@ class ProductPage extends React.Component {
 
   componentDidMount() {
     this.getProductInfo();
+    this.getAmountOfItemsInCart();
   }
 
   getProductInfo = async () => {
@@ -31,30 +31,30 @@ class ProductPage extends React.Component {
 
   getAmountOfItemsInCart = () => {
     const localStorageNow = getProductsFromCart();
+    const cartTotal = localStorageNow.reduce((acc, curr) => acc + curr.quantity, 0);
     if (localStorageNow) {
-      console.log(localStorageNow.length);
-      this.setState({ cartAmount: localStorageNow.length });
+      this.setState({ cartAmount: cartTotal });
     }
   };
 
-  addToCart = async () => {
-    const {
-      productInfo: { id },
-    } = this.state;
-    addProductsToCart(id);
+  addToCart = () => {
+    const { productInfo } = this.state;
+    addProductsToCart(productInfo);
     this.getAmountOfItemsInCart();
-  };
+  }
 
   render() {
-    const { productInfo, cartAmount } = this.state;
+    const { productInfo: { title }, cartAmount } = this.state;
+    const { match: { params: { id } } } = this.props;
     return (
       <div>
         <Link to="/cart" data-testid="shopping-cart-button">
           Carrinho
           {' '}
-          <span>{cartAmount}</span>
+          <span data-testid="shopping-cart-size">{cartAmount}</span>
         </Link>
-        <h2 data-testid="product-detail-name">{productInfo.title}</h2>
+        <h2 data-testid="product-detail-name">{ title }</h2>
+        <Assessments id={ id } />
         <button
           type="button"
           data-testid="product-detail-add-to-cart"

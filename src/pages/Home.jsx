@@ -1,21 +1,22 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import {
   getCategories,
+  getProductsFromCategory,
   getProductsFromQuery,
-  getProductsFromCart,
 } from '../services/api';
 import Product from '../components/Product';
+import { addProductsToCart, getProductsFromCart } from '../services/storage';
 
 class Home extends React.Component {
   constructor() {
     super();
     this.state = {
-      categorias: [],
       searchInput: '',
-      productsInfo: [],
       haveInfo: true,
+      categories: [],
+      productsInfo: [],
+      productsList: [],
       cartAmount: 0,
     };
   }
@@ -27,46 +28,56 @@ class Home extends React.Component {
 
   handleCategories = async () => {
     const response = await getCategories();
-    this.setState({
-      categorias: response,
-    });
+    this.setState({ categories: response });
   };
 
-  handleChange = (event) => {
-    const { value } = event.target;
-    this.setState({ searchInput: value });
+  handleChange = ({ target }) => {
+    this.setState({ searchInput: target.value });
   };
 
   searchProducts = async () => {
     const { searchInput } = this.state;
-    const response = await getProductsFromQuery(searchInput);
-    if (response.results.length !== 0) {
-      this.setState({ productsInfo: response.results, haveInfo: true });
+    const { results } = await getProductsFromQuery(searchInput);
+    if (results.length !== 0) {
+      this.setState({ productsInfo: results, haveInfo: true });
     } else {
       this.setState({ haveInfo: false });
     }
   };
 
-  redirectToCategory = ({ target }) => {
-    const {
-      history: { push },
-    } = this.props;
+  getProducts = async ({ target }) => {
     const { id } = target;
-    push(`/category/${id}`);
+    const { results } = await getProductsFromCategory(id);
+    this.setState({
+      productsInfo: [],
+      productsList: results,
+    });
   };
 
   getAmountOfItemsInCart = () => {
     const localStorageNow = getProductsFromCart();
+    const cartTotal = localStorageNow.reduce((acc, curr) => acc + curr.quantity, 0);
     if (localStorageNow) {
-      console.log(localStorageNow.length);
-      this.setState({ cartAmount: localStorageNow.length });
+      this.setState({ cartAmount: cartTotal });
     }
   };
 
+  addToCart = ({ target }) => {
+    const { productsList } = this.state;
+    const product = productsList.find(({ id }) => id === target.id);
+    addProductsToCart(product);
+    this.getAmountOfItemsInCart();
+  };
+
   render() {
-    const { categorias, productsInfo, haveInfo, cartAmount } = this.state;
+    const { categories, productsInfo, productsList, haveInfo, cartAmount } = this.state;
     return (
       <div data-testid="home-initial-message">
+        <Link to="/cart" data-testid="shopping-cart-button">
+          Carrinho
+          {' '}
+          <span data-testid="shopping-cart-size">{cartAmount}</span>
+        </Link>
         <span>Digite algum termo de pesquisa ou escolha uma categoria.</span>
         <label htmlFor="input">
           <input
@@ -82,21 +93,16 @@ class Home extends React.Component {
             Pesquisar
           </button>
         </label>
-        <Link to="/cart" data-testid="shopping-cart-button">
-          Carrinho
-          {' '}
-          <span>{cartAmount}</span>
-        </Link>
         <aside>
-          {categorias.map((categoria) => (
+          {categories.map(({ name, id }) => (
             <button
               data-testid="category"
               type="button"
-              id={ categoria.id }
-              key={ categoria.id }
-              onClick={ this.redirectToCategory }
+              id={ id }
+              key={ id }
+              onClick={ this.getProducts }
             >
-              {categoria.name}
+              {name}
             </button>
           ))}
         </aside>
@@ -107,15 +113,24 @@ class Home extends React.Component {
         ) : (
           <span>Nenhum produto foi encontrado</span>
         )}
+        {productsInfo.length === 0
+          && productsList.length > 0
+          && productsList.map((product) => (
+            <div key={ product.id }>
+              <Product product={ product } />
+              <button
+                type="button"
+                id={ product.id }
+                onClick={ this.addToCart }
+                data-testid="product-add-to-cart"
+              >
+                Adicionar ao Carrinho
+              </button>
+            </div>
+          ))}
       </div>
     );
   }
 }
-
-Home.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func,
-  }).isRequired,
-};
 
 export default Home;
