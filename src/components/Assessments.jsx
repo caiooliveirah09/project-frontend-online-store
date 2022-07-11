@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { addAssessments, readAssessments } from '../services/storage';
 
 class Assessments extends React.Component {
   constructor() {
@@ -14,7 +15,7 @@ class Assessments extends React.Component {
   }
 
   componentDidMount() {
-    const localStorage = this.readAssessments();
+    const localStorage = readAssessments();
     this.setState({ allAssessments: localStorage }, () => {
       this.takeAssessments();
     });
@@ -23,61 +24,34 @@ class Assessments extends React.Component {
   takeAssessments = () => {
     const { id } = this.props;
     const { allAssessments } = this.state;
-    console.log(allAssessments);
     if (allAssessments !== null) {
       const newAssessments = allAssessments.filter((assessment) => assessment.id === id);
       this.setState({ newAssessments });
     }
   };
 
-  getEmail = (event) => {
-    this.setState({ email: event.target.value });
+  onHandleChange = ({ target }) => {
+    const { name, value } = target;
+    this.setState({ [name]: value });
   }
 
-  getEvaluation = (event) => {
-    this.setState({ evaluation: event.target.value });
-  }
-
-  getRate = (event) => {
-    if (event.target.checked) {
-      this.setState({ rate: event.target.value });
-    } else {
-      this.setState({ rate: '' });
-    }
+  getRate = ({ target }) => {
+    this.setState({
+      rate: target.checked ? target.value : '',
+    });
   }
 
   saveAssessments = () => {
     const { id } = this.props;
     const { email, rate, evaluation } = this.state;
     const assessment = { email, rate, evaluation, id };
-    this.addAssessments(assessment);
+    addAssessments(assessment);
     this.setState({ email: '', rate: '', evaluation: '' });
-    const localStorage = this.readAssessments();
+    const localStorage = readAssessments();
     this.setState({ allAssessments: localStorage }, () => {
       this.takeAssessments();
     });
   };
-
-  readAssessments = () => JSON.parse(localStorage.getItem('assessments_products'));
-
-  saveLocalStorage = (assessments) => {
-    const ASSESSMENTS_KEY = 'assessments_products';
-    if (!JSON.parse(localStorage.getItem(ASSESSMENTS_KEY))) {
-      localStorage.setItem(ASSESSMENTS_KEY, JSON.stringify([]));
-    }
-    localStorage.setItem(ASSESSMENTS_KEY, JSON.stringify(assessments));
-  }
-
-  addAssessments = (assessment) => {
-    const ASSESSMENTS_KEY = 'assessments_products';
-    if (!JSON.parse(localStorage.getItem(ASSESSMENTS_KEY))) {
-      localStorage.setItem(ASSESSMENTS_KEY, JSON.stringify([]));
-    }
-    if (assessment) {
-      const assessments = this.readAssessments();
-      this.saveLocalStorage([...assessments, assessment]);
-    }
-  }
 
   render() {
     const { email, evaluation, newAssessments } = this.state;
@@ -86,11 +60,14 @@ class Assessments extends React.Component {
         <span> Avaliações </span>
         <form>
           <label htmlFor="email">
+            Email
             <input
               data-testid="product-detail-email"
               type="text"
+              name="email"
+              id="email"
               placeholder="Email"
-              onChange={ this.getEmail }
+              onChange={ this.onHandleChange }
               value={ email }
             />
           </label>
@@ -126,17 +103,15 @@ class Assessments extends React.Component {
               onChange={ this.getRate }
             />
           </label>
-          <label htmlFor="evaluation">
-            <textarea
-              data-testid="product-detail-evaluation"
-              name="evaluation"
-              cols="30"
-              rows="10"
-              placeholder="Mensagem (opcional)"
-              onChange={ this.getEvaluation }
-              value={ evaluation }
-            />
-          </label>
+          <textarea
+            data-testid="product-detail-evaluation"
+            name="evaluation"
+            cols="30"
+            rows="10"
+            placeholder="Mensagem (opcional)"
+            onChange={ this.onHandleChange }
+            value={ evaluation }
+          />
           <button
             type="button"
             data-testid="submit-review-btn"
