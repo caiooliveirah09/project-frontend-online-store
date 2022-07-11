@@ -45,10 +45,8 @@ class Cart extends Component {
   };
 
   increaseAmountInCart = (productId) => {
+    addProductsToCart({ id: productId });
     const localStorageNow = getProductsFromCart();
-    const index = this.findProductAtLocalStorage(localStorageNow, productId);
-    localStorageNow[index].quantity += 1;
-    saveProductsToCart(localStorageNow);
     this.setState({ cart: localStorageNow });
   };
 
