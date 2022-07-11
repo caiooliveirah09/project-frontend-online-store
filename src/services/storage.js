@@ -7,8 +7,12 @@ if (!JSON.parse(localStorage.getItem(CART_PRODUCTS_KEY))) {
 export const getProductsFromCart = () => (
   JSON.parse(localStorage.getItem(CART_PRODUCTS_KEY)));
 
-export const saveProductsToCart = (cart) => (
-  localStorage.setItem(CART_PRODUCTS_KEY, JSON.stringify(cart)));
+export const saveProductsToCart = (cart) => {
+  cart.forEach(({ quantity }, index) => {
+    if (quantity === 0) cart.splice(index, 1);
+  });
+  (localStorage.setItem(CART_PRODUCTS_KEY, JSON.stringify(cart)));
+};
 
 const findProductPosition = (productId) => {
   const storage = getProductsFromCart();
@@ -61,3 +65,24 @@ export function addProductsToCart({
   const updatedCart = updateProductQuantity(id, productQuantity);
   saveProductsToCart(updatedCart);
 }
+export const readAssessments = () => (
+  JSON.parse(localStorage.getItem('assessments_products')));
+
+export const saveLocalStorage = (assessments) => {
+  const ASSESSMENTS_KEY = 'assessments_products';
+  if (!JSON.parse(localStorage.getItem(ASSESSMENTS_KEY))) {
+    localStorage.setItem(ASSESSMENTS_KEY, JSON.stringify([]));
+  }
+  localStorage.setItem(ASSESSMENTS_KEY, JSON.stringify(assessments));
+};
+
+export const addAssessments = (assessment) => {
+  const ASSESSMENTS_KEY = 'assessments_products';
+  if (!JSON.parse(localStorage.getItem(ASSESSMENTS_KEY))) {
+    localStorage.setItem(ASSESSMENTS_KEY, JSON.stringify([]));
+  }
+  if (assessment) {
+    const assessments = readAssessments();
+    saveLocalStorage([...assessments, assessment]);
+  }
+};
