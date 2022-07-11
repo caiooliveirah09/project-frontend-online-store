@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Product from '../components/Product';
-import getProductsFromId, { getProductsFromCart } from '../services/api';
+import { getProductsFromCart } from '../services/storage';
 
 class Cart extends Component {
   constructor() {
@@ -16,20 +16,14 @@ class Cart extends Component {
   }
 
   loadCartProducts = () => {
-    // Linha 20 tá criando um novo array sem IDs repetidos!!
-    const allProductsId = getProductsFromCart();
-    const eachProductId = [...new Set(allProductsId)];
-    eachProductId.map(async (id) => {
-      const product = await getProductsFromId(id);
-      this.setState((pastState) => ({
-        cart: [...pastState.cart, product],
-      }));
-    });
+    const cartProducts = getProductsFromCart();
+    this.setState({ cart: cartProducts });
   };
 
   getProductQuantity = (productId) => {
-    const cart = getProductsFromCart();
-    return cart.filter((id) => id === productId).length;
+    const cartProducts = getProductsFromCart();
+    const { quantity } = cartProducts.find(({ id }) => id === productId);
+    return quantity;
   };
 
   render() {
@@ -43,12 +37,12 @@ class Cart extends Component {
         ) : (
           <>
             {cart.map((product) => (
-              <section key={ product.id }>
+              <div key={ product.id }>
                 <Product product={ product } />
                 <span data-testid="shopping-cart-product-quantity">
                   {this.getProductQuantity(product.id)}
                 </span>
-              </section>
+              </div>
             ))}
             <Link data-testid="checkout-products" to="/finish">Finalizar Compra</Link>
           </>

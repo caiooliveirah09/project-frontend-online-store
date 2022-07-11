@@ -17,7 +17,7 @@ class FinishOrder extends Component {
             <label htmlFor="cpf">
               <input
                 data-testid="checkout-cpf"
-                type="number"
+                type="text"
                 id="cpf"
               />
             </label>
@@ -31,7 +31,7 @@ class FinishOrder extends Component {
             <label htmlFor="phone">
               <input
                 data-testid="checkout-phone"
-                type="number"
+                type="text"
                 id="phone"
               />
             </label>
@@ -40,7 +40,7 @@ class FinishOrder extends Component {
             <label htmlFor="cep">
               <input
                 data-testid="checkout-cep"
-                type="number"
+                type="text"
                 id="cep"
               />
             </label>
