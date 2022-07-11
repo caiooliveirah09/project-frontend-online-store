@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { getProductsFromId } from '../services/api';
 import { addProductsToCart } from '../services/storage';
 import style from './productPage.module.scss';
+import Assessments from '../components/Assessments';
 
 class ProductPage extends Component {
   constructor() {
@@ -30,6 +31,7 @@ class ProductPage extends Component {
 
   render() {
     const { productInfo } = this.state;
+    const { match: { params: { id } } } = this.props;
     return (
       <div>
         <header>
@@ -57,6 +59,18 @@ class ProductPage extends Component {
             </button>
           </div>
         </div>
+        <Link to="/cart" data-testid="shopping-cart-button">
+          Carrinho
+        </Link>
+        <h2 data-testid="product-detail-name">{ productInfo.title }</h2>
+        <Assessments id={ id } />
+        <button
+          type="button"
+          data-testid="product-detail-add-to-cart"
+          onClick={ this.addToCart }
+        >
+          Adicionar ao carrinho
+        </button>
       </div>
     );
   }
