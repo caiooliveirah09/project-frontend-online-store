@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Product from '../components/Product';
 import {
+  addProductsToCart,
   getProductsFromCart,
   saveProductsToCart,
 } from '../services/storage';
@@ -28,26 +29,21 @@ class Cart extends Component {
     return quantity;
   };
 
-  findProductAtLocalStorage = (nowStorage, productId) => {
-    for (let index = 0; index < nowStorage.length; index += 1) {
-      if (nowStorage[index].id === productId) {
-        return index;
-      }
-    }
-  }
+  findProductAtLocalStorage = (storage, productId) => (
+    storage.indexOf(storage.find(({ id }) => id === productId)));
 
   decreaseAmountInCart = (productId) => {
-    const localStorageNow = getProductsFromCart();
-    const index = this.findProductAtLocalStorage(localStorageNow, productId);
-    if (localStorageNow[index].quantity > 1) localStorageNow[index].quantity -= 1;
-    saveProductsToCart(localStorageNow);
-    this.setState({ cart: localStorageNow });
+    const storage = getProductsFromCart();
+    const index = this.findProductAtLocalStorage(storage, productId);
+    if (storage[index].quantity > 1) storage[index].quantity -= 1;
+    saveProductsToCart(storage);
+    this.setState({ cart: storage });
   };
 
   increaseAmountInCart = (productId) => {
     addProductsToCart({ id: productId });
-    const localStorageNow = getProductsFromCart();
-    this.setState({ cart: localStorageNow });
+    const storage = getProductsFromCart();
+    this.setState({ cart: storage });
   };
 
   clearCart = () => {
