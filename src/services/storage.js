@@ -7,8 +7,12 @@ if (!JSON.parse(localStorage.getItem(CART_PRODUCTS_KEY))) {
 export const getProductsFromCart = () => (
   JSON.parse(localStorage.getItem(CART_PRODUCTS_KEY)));
 
-export const saveProductsToCart = (cart) => (
-  localStorage.setItem(CART_PRODUCTS_KEY, JSON.stringify(cart)));
+export const saveProductsToCart = (cart) => {
+  cart.forEach(({ quantity }, index) => {
+    if (quantity === 0) cart.splice(index, 1);
+  });
+  (localStorage.setItem(CART_PRODUCTS_KEY, JSON.stringify(cart)));
+};
 
 const findProductPosition = (productId) => {
   const storage = getProductsFromCart();
@@ -37,11 +41,18 @@ const updateProductQuantity = (productId, newQuantity) => {
   return storage;
 };
 
-export function addProductsToCart({ id, title, thumbnail, price }) {
+export function addProductsToCart({
+  id,
+  title,
+  thumbnail,
+  price,
+  available_quantity: inStock,
+}) {
   const cartProducts = getProductsFromCart();
   const productQuantity = checkProductQuantity(id);
   const newProduct = {
     id,
+    inStock,
     title,
     thumbnail,
     price,

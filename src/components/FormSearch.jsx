@@ -21,7 +21,7 @@ export default class FormSearch extends React.Component {
           type="button"
           onClick={ searchProducts }
         >
-          pesquisar
+          Pesquisar
         </button>
       </form>
     );

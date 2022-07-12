@@ -6,7 +6,7 @@ import {
   getProductsFromCategory,
   getProductsFromQuery,
 } from '../services/api';
-import { addProductsToCart } from '../services/storage';
+import { addProductsToCart, getProductsFromCart } from '../services/storage';
 
 class Home extends React.Component {
   constructor() {
@@ -17,11 +17,13 @@ class Home extends React.Component {
       categories: [],
       productsInfo: [],
       productsList: [],
+      cartAmount: 0,
     };
   }
 
   componentDidMount() {
     this.handleCategories();
+    this.getAmountOfItemsInCart();
   }
 
   handleCategories = async () => {
@@ -52,18 +54,30 @@ class Home extends React.Component {
     });
   };
 
+  getAmountOfItemsInCart = () => {
+    const localStorageNow = getProductsFromCart();
+    const cartTotal = localStorageNow
+      .reduce((acc, curr) => acc + curr.quantity, 0);
+    if (localStorageNow) {
+      this.setState({ cartAmount: cartTotal });
+    }
+  };
+
   addToCart = ({ target }) => {
     const { productsList } = this.state;
     const product = productsList.find(({ id }) => id === target.id);
     addProductsToCart(product);
+    this.getAmountOfItemsInCart();
   };
 
   render() {
-    const { categories, productsInfo, productsList, haveInfo } = this.state;
+    const { categories, productsInfo, productsList, haveInfo, cartAmount } = this.state;
     return (
       <div data-testid="home-initial-message">
         <Link to="/cart" data-testid="shopping-cart-button">
           Carrinho
+          {' '}
+          <span data-testid="shopping-cart-size">{cartAmount}</span>
         </Link>
         <span>Digite algum termo de pesquisa ou escolha uma categoria.</span>
         <label htmlFor="input">
@@ -95,7 +109,11 @@ class Home extends React.Component {
         </aside>
         {haveInfo ? (
           productsInfo.map((product) => (
-            <Product key={ product.id } product={ product } />
+            <div key={ product.id }>
+              <Product product={ product } />
+              { product.shipping.free_shipping
+              && <h3 data-testid="free-shipping">Frete Grátis</h3> }
+            </div>
           ))
         ) : (
           <span>Nenhum produto foi encontrado</span>
@@ -105,6 +123,8 @@ class Home extends React.Component {
           && productsList.map((product) => (
             <div key={ product.id }>
               <Product product={ product } />
+              { product.shipping.free_shipping
+              && <h3 data-testid="free-shipping">Frete Grátis</h3> }
               <button
                 type="button"
                 id={ product.id }
