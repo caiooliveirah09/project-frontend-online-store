@@ -48,7 +48,6 @@ class Home extends React.Component {
   getProducts = async ({ target }) => {
     const { id } = target;
     const { results } = await getProductsFromCategory(id);
-    console.log(results);
     this.setState({
       productsInfo: [],
       productsList: results,
