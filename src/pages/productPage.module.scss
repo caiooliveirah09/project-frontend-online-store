@@ -1,0 +1,47 @@
+header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.container{
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top:10rem;
+    .cardImg{
+        img{
+            border-radius: 8px;
+            width:20rem;
+            height:20rem;
+        }
+    }
+    .productDescription{
+        background:#ffffff;
+        width:35rem;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        border-radius: 8px;
+        padding:1rem;
+        font-family: Roboto;
+        gap: 1rem;
+        strong{
+            font-size: 25px;
+            
+        }
+        button{
+            border: 0;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            margin-top:1rem;
+            background: #b130f2;
+            color: #fff;
+            font-size:20px;
+            cursor: pointer;
+        }
+    }
+}

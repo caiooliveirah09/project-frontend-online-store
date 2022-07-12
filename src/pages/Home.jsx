@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Product from '../components/Product';
 import {
   getCategories,
   getProductsFromCategory,
   getProductsFromQuery,
 } from '../services/api';
-import Product from '../components/Product';
 import { addProductsToCart, getProductsFromCart } from '../services/storage';
 
 class Home extends React.Component {

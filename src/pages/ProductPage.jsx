@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { getProductsFromId } from '../services/api';
 import { addProductsToCart, getProductsFromCart } from '../services/storage';
+import style from './productPage.module.scss';
 import Assessments from '../components/Assessments';
 
 class ProductPage extends Component {
@@ -45,16 +46,28 @@ class ProductPage extends Component {
   }
 
   render() {
-    const { productInfo: { title }, cartAmount } = this.state;
+    const { productInfo, cartAmount } = this.state;
     const { match: { params: { id } } } = this.props;
     return (
       <div>
-        <Link to="/cart" data-testid="shopping-cart-button">
-          Carrinho
-          {' '}
-          <span data-testid="shopping-cart-size">{cartAmount}</span>
-        </Link>
-        <h2 data-testid="product-detail-name">{ title }</h2>
+        <header>
+          <Link to="/">
+            <h2>Voltar para Home</h2>
+          </Link>
+          <Link to="/cart" data-testid="shopping-cart-button">
+            Carrinho
+            <span data-testid="shopping-cart-size">{cartAmount}</span>
+          </Link>
+        </header>
+        <div className={ style.container }>
+          <div className={ style.cardImg }>
+            <img src={ productInfo.thumbnail } alt="" />
+          </div>
+          <div className={ style.productDescription }>
+            <h2 data-testid="product-detail-name">{ productInfo.title }</h2>
+            <strong>{ `R$ ${productInfo.price}` }</strong>
+          </div>
+        </div>
         <Assessments id={ id } />
         <button
           type="button"

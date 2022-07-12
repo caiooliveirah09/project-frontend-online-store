@@ -1,0 +1,98 @@
+
+.container{
+    max-width: 1300px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin:  0 auto;
+    padding: 2rem;
+    margin-top: 1rem;
+    .productCart{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        border: 3px solid rgb(183, 160, 203);
+        border-radius: 8px;
+        padding:1rem;
+        margin-bottom:1rem;
+        
+        .product{
+          margin-bottom: 1rem;  
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 1rem;
+          img{
+            border:0;
+            border-radius: 8px;
+          }
+        }
+
+    }
+    form{
+        width: 100%;
+        border-radius: 8px;
+        border: 3px solid rgb(183, 160, 203);
+        padding:1rem;
+        input{
+                border: 0;
+                border-radius: 8px;
+                padding: 1rem;
+        }
+        .groupAbout{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            label{
+                font-family: Roboto;
+                
+                input{
+                    width: 15rem;
+                }
+            }
+
+        }
+        .groupAddress{
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1rem;
+            label{
+     
+                .address{
+                    
+                    width: 51rem;
+                }
+                .cep{
+                   width: 15rem; 
+                }
+            }
+        }
+        .groupComplement{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            input{
+                width: 15.7rem;
+            }
+            select{
+                width: 15rem;
+                padding: 1rem;
+                border-radius: 8px;
+                option{
+                    border: 0;
+                    
+                }
+            }
+        }
+
+    }
+}
