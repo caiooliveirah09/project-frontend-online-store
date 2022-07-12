@@ -62,7 +62,6 @@ class ProductPage extends Component {
         <Link to="/cart" data-testid="shopping-cart-button">
           Carrinho
         </Link>
-        <h2 data-testid="product-detail-name">{ productInfo.title }</h2>
         <Assessments id={ id } />
         <button
           type="button"
