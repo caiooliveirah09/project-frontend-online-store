@@ -109,7 +109,11 @@ class Home extends React.Component {
         </aside>
         {haveInfo ? (
           productsInfo.map((product) => (
-            <Product key={ product.id } product={ product } />
+            <div key={ product.id }>
+              <Product product={ product } />
+              { product.shipping.free_shipping
+              && <h3 data-testid="free-shipping">Frete Grátis</h3> }
+            </div>
           ))
         ) : (
           <span>Nenhum produto foi encontrado</span>
@@ -119,6 +123,8 @@ class Home extends React.Component {
           && productsList.map((product) => (
             <div key={ product.id }>
               <Product product={ product } />
+              { product.shipping.free_shipping
+              && <h3 data-testid="free-shipping">Frete Grátis</h3> }
               <button
                 type="button"
                 id={ product.id }
